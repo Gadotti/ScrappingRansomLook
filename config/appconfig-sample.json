@@ -1,0 +1,18 @@
+{
+    "url": "https://www.ransomlook.io/recent",
+    "email": {
+        "smtp_username": "",
+        "smtp_password": "",
+        "smtp_server": "",
+        "smtp_port": 587,
+        "from": "ABC <abc@def.com>",
+        "to": ["ghi <account@email.com>"],
+        "to_bcc": [],
+        "subject": "",
+        "message_head": "",
+        "message_foot": ""
+    },
+    "alert": true,
+    "key_words_alert": [],
+    "schedule_times": []
+}
