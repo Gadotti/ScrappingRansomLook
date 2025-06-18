@@ -36,6 +36,8 @@ def check_new_posts():
         log_event('-- Starting verification --')
 
         url = get_config('url')
+        siem_log_all = get_config('siem_breach_log_all')
+        siem_log_tag = get_config('siem_breach_log_tag')
         if url is None:
             print("An 'url' setting configuration in apconfig.json is needed")
             exit()
@@ -62,9 +64,14 @@ def check_new_posts():
                 postline.matchingtags = matchingtags
                 message = f'{postline.dateString} | {postline.victim} | {postline.group} | Tags: {matchingtags}'
                 notify_messages.append(message)
+
+                if (siem_log_tag != ''):
+                    save_result_siem(postline, siem_log_tag)
             
             log_post_found(postline)
             save_result(postline)
+            if (siem_log_all != ''):
+                save_result_siem(postline, siem_log_all)
             print("")
 
         notify(notify_messages)    

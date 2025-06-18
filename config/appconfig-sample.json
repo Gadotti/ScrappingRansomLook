@@ -14,5 +14,7 @@
     },
     "alert": true,
     "key_words_alert": [],
-    "schedule_times": []
+    "schedule_times": [],
+    "siem_breach_log_all": "",
+    "siem_breach_log_tag": ""
 }
