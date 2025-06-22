@@ -46,11 +46,19 @@ def save_result_siem(postline, filepath):
         file_exists = os.path.exists(filepath)
 
         with open(filepath, 'a', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+            writer = csv.writer(file, quoting=csv.QUOTE_ALL, delimiter=';')
             
             # Escreve cabeçalho se o arquivo ainda não existir
             if not file_exists:
                 writer.writerow(['timestamp', 'event', 'detailsUrl'])
+
+            # # Garante que o ponteiro esteja no final para ler último caractere
+            # file.seek(0, os.SEEK_END)
+            # if file.tell() > 0:
+            #     file.seek(file.tell() - 1, os.SEEK_SET)
+            #     last_char = file.read(1)
+            #     if last_char != '\n':
+            #         file.write('\n')
 
             writer.writerow([
                 timestamp,
