@@ -56,8 +56,8 @@ def check_new_posts():
                 continue
 
             print("Date:", postline.date)
-            print("Victim:", postline.victim)
-            print("Group:", postline.group)        
+            print("Victim:", postline.victim.encode("utf-8"))
+            print("Group:", postline.group.encode("utf-8"))
 
             matchingtags = check_matching_tags(postline)
             if (matchingtags is not None):

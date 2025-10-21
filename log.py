@@ -1,8 +1,16 @@
 import os
 import datetime
+from config import *
 
 log_file_name = None
 file_size_limit = 500 * 1024  # 500 KB
+
+def get_source_folder():
+    log_absolute_path = get_config('log_absolute_path')
+    if (log_absolute_path is None):
+        return "source"
+    
+    return log_absolute_path
 
 def generate_log_file_name():
     global log_file_name
@@ -12,7 +20,7 @@ def generate_log_file_name():
     suffix = extract_suffix(log_file_name)    
 
     while True:
-        log_path = os.path.join("source", log_file_name)
+        log_path = os.path.join(get_source_folder(), log_file_name)
 
         if not os.path.exists(log_path):
             return log_file_name
@@ -37,7 +45,7 @@ def extract_suffix(base_name):
 
 def log_event(message: str):
     log_file = generate_log_file_name()
-    log_path = os.path.join("source", log_file)
+    log_path = os.path.join(get_source_folder(), log_file)
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_message = f"{timestamp} > {message}"
@@ -45,7 +53,7 @@ def log_event(message: str):
     with open(log_path, 'a', encoding='utf-8') as log_file:
         log_file.write(log_message + '\n')
 
-    print(log_message)
+    print(log_message.encode("utf-8"))
 
 def log_post_found(postline):
     message = f"-- --New post: {postline.dateString} | {postline.victim} | {postline.matchingtags}"

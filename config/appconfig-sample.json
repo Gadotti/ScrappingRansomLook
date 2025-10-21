@@ -16,5 +16,6 @@
     "key_words_alert": [],
     "schedule_times": [],
     "siem_breach_log_all": "",
-    "siem_breach_log_tag": ""
+    "siem_breach_log_tag": "",
+    "log_absolute_path": ""
 }
