@@ -38,8 +38,9 @@ def save_result(postline):
 
 def save_result_siem(postline, filepath):
     try:
-        # Converte postline.dateString para timestamp no formato ISO 8601 UTC
-        timestamp = convert_to_timestamp_iso(postline.dateString)
+        # Usa o datetime completo do post quando disponível
+        date_source = getattr(postline, 'dateTimeFull', None) or postline.dateString
+        timestamp = convert_to_timestamp_iso(date_source)
         event = postline.victim
         details_url = "https://www.ransomlook.io/recent"
 
@@ -71,17 +72,12 @@ def save_result_siem(postline, filepath):
 
 def convert_to_timestamp_iso(data_str):
     try:
-        # Converte a data string em um objeto datetime (sem hora)
-        data_base = datetime.strptime(data_str, '%Y-%m-%d').date()
-        
-        # Obtém a hora atual em UTC
-        hora_atual_utc = datetime.now(timezone.utc).time()
-        
-        # Combina a data fornecida com a hora atual em UTC
-        data_hora_completa = datetime.combine(data_base, hora_atual_utc).replace(tzinfo=timezone.utc)
-
-        # Retorna no formato ISO 8601 com 'Z' indicando UTC
-        return data_hora_completa.strftime('%Y-%m-%dT%H:%M:%SZ')
-    
-    except ValueError as e:
+        for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
+            try:
+                dt = datetime.strptime(data_str, fmt).replace(tzinfo=timezone.utc)
+                return dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+            except ValueError:
+                continue
+        return f"Erro ao converter data: formato inválido '{data_str}'"
+    except Exception as e:
         return f"Erro ao converter data: {e}"

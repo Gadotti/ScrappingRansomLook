@@ -53,7 +53,7 @@ def log_event(message: str):
     with open(log_path, 'a', encoding='utf-8') as log_file:
         log_file.write(log_message + '\n')
 
-    print(log_message.encode("utf-8"))
+    print(log_message)
 
 def log_post_found(postline):
     message = f"-- --New post: {postline.dateString} | {postline.victim} | {postline.matchingtags}"
