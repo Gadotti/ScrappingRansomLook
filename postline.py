@@ -17,12 +17,24 @@ class PostLine:
         datetime_attr = (time_tag.get('datetime') or '').strip() if time_tag else ''
 
         dt = None
-        for fmt in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
-            try:
-                dt = datetime.strptime(datetime_attr, fmt)
-                break
-            except ValueError:
-                continue
+        try:
+            for fmt in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d'):
+                try:
+                    dt = datetime.strptime(datetime_attr, fmt)
+                    break
+                except ValueError:
+                    continue
+
+            if dt is None:
+                for fmt in ('%H:%M:%S.%f', '%H:%M:%S', '%H:%M'):
+                    try:
+                        t = datetime.strptime(datetime_attr, fmt)
+                        dt = datetime.combine(date.today(), t.time())
+                        break
+                    except ValueError:
+                        continue
+        except Exception:
+            pass
 
         if dt is None:
             dt = datetime.now()

@@ -9,6 +9,8 @@ import schedule
 import time
 import sys
 
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 def main():
     if len(sys.argv) > 1:
         arg = sys.argv[1]
@@ -49,33 +51,36 @@ def check_new_posts():
         notify_messages = []
 
         for line in reversed(lines):
-            postline = PostLine()
-            postline.process_line(line)
+            try:
+                postline = PostLine()
+                postline.process_line(line)
 
-            if not is_new_record(postline):
-                continue
+                if not is_new_record(postline):
+                    continue
 
-            print("Date:", postline.date)
-            print("Victim:", postline.victim.encode("utf-8"))
-            print("Group:", postline.group.encode("utf-8"))
+                print("Date:", postline.date)
+                print("Victim:", postline.victim)
+                print("Group:", postline.group)
 
-            matchingtags = check_matching_tags(postline)
-            if (matchingtags is not None):
-                postline.matchingtags = matchingtags
-                message = f'{postline.dateString} | {postline.victim} | {postline.group} | Tags: {matchingtags}'
-                notify_messages.append(message)
+                matchingtags = check_matching_tags(postline)
+                if (matchingtags is not None):
+                    postline.matchingtags = matchingtags
+                    message = f'{postline.dateString} | {postline.victim} | {postline.group} | Tags: {matchingtags}'
+                    notify_messages.append(message)
 
-                if (siem_log_tag != ''):
-                    save_result_siem(postline, siem_log_tag)
-            
-            log_post_found(postline)
-            save_result(postline)
-            if (siem_log_all != ''):
-                save_result_siem(postline, siem_log_all)
-            print("")
+                    if (siem_log_tag != ''):
+                        save_result_siem(postline, siem_log_tag)
 
-        notify(notify_messages)    
-            
+                log_post_found(postline)
+                save_result(postline)
+                if (siem_log_all != ''):
+                    save_result_siem(postline, siem_log_all)
+                print("")
+            except Exception as error:
+                log_event(f"Error processing record: {error}")
+
+        notify(notify_messages)
+
         log_event('-- End verification --')
         print('-- End --')
 
