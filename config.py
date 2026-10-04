@@ -1,8 +1,10 @@
 import json
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def get_config(config_name):
-    config_file_path = 'config/appconfig.json'
+    config_file_path = os.path.join(BASE_DIR, 'config', 'appconfig.json')
 
     try:
         with open(config_file_path, 'r', encoding='utf-8') as file:

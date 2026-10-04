@@ -3,7 +3,8 @@ import os
 from log import *
 from datetime import datetime, timezone
 
-CSVFILE = 'source/breachs_posts.csv'
+CSVFILE = os.path.join(BASE_DIR, 'source', 'breachs_posts.csv')
+os.makedirs(os.path.dirname(CSVFILE), exist_ok=True)
 NUM_LINES_TO_CHECK = 100
 
 def is_new_record(postline):

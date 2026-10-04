@@ -7,10 +7,10 @@ file_size_limit = 500 * 1024  # 500 KB
 
 def get_source_folder():
     log_absolute_path = get_config('log_absolute_path')
-    if (log_absolute_path is None):
-        return "source"
-    
-    return log_absolute_path
+    folder = log_absolute_path if log_absolute_path is not None else os.path.join(BASE_DIR, "source")
+    os.makedirs(folder, exist_ok=True)
+
+    return folder
 
 def generate_log_file_name():
     global log_file_name

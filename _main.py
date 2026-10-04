@@ -68,12 +68,12 @@ def check_new_posts():
                     message = f'{postline.dateString} | {postline.victim} | {postline.group} | Tags: {matchingtags}'
                     notify_messages.append(message)
 
-                    if (siem_log_tag != ''):
+                    if siem_log_tag:
                         save_result_siem(postline, siem_log_tag)
 
                 log_post_found(postline)
                 save_result(postline)
-                if (siem_log_all != ''):
+                if siem_log_all:
                     save_result_siem(postline, siem_log_all)
                 print("")
             except Exception as error:
